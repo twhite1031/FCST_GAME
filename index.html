@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forecasting Game</title>
+</head>
+<body>
+    <h1>Forecasting Game</h1>
+    <form action="{{ url_for('submit') }}" method="post">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date"><br>
+        <label for="station_id">Station ID:</label>
+        <input type="text" id="station_id" name="station_id"><br>
+        <label for="forecasted_temp">Forecasted Temperature:</label>
+        <input type="number" id="forecasted_temp" name="forecasted_temp"><br>
+        <label for="forecasted_wind">Forecasted Wind Speed:</label>
+        <input type="number" id="forecasted_wind" name="forecasted_wind"><br>
+        <input type="submit" value="Submit">
+    </form>
+    <a href="{{ url_for('results') }}">View Results</a>
+</body>
+</html>
