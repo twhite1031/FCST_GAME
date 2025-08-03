@@ -9,9 +9,10 @@ app = Flask(__name__)
 
 # Google Sheets API setup
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name('/data2/white/PYTHON_SCRIPTS/METCLUB/certain-tendril-430414-n8-7d615e996d05.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('certain-tendril-430414-n8-7d615e996d05.json', scope)
 client = gspread.authorize(creds)
 spreadsheet = client.open("Forecasting_Game")
+
 # Access specific sheets by name
 sheet = spreadsheet.worksheet("Submissions")
 sheet2 = spreadsheet.worksheet("Results")
@@ -78,6 +79,7 @@ def index():
 #    return redirect(url_for('index'))
 
 @app.route('/results')
+
 def results():
     # Retrieve user forecasts from Google Sheets
     user_data = sheet.get_all_records()

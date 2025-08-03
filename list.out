@@ -1,0 +1,107 @@
+
+       Local Game Consensus of 13 for Mon24                   Verification
+ OSW 47.9 40.5 355. 3.8  9.54 0.46 0.00 0.00 0.00    49 32   1  6 10  0  0  0  0.00
+   Flood Game for ca-or-wa-id-mt Consensus of 12               Verification
+                0.92  44.12 123.61                                  0
+  ErCn(raw): Wind =  1.950  Prob =   0.213  Amnt =  0.000  Max =  1.077  Min =  8.538
+  ErCn(raw): PrbF =  0.852  LocF =   0.000
+
+       Local Game Consensus of 13 for Mon48                   Verification
+ OSW 51.8 42.8  99. 3.6  7.85 2.15 0.00 0.00 0.01    54 47   1  6 10  0  0  0  0.00
+   Flood Game for ca-or-wa-id-mt Consensus of 13               Verification
+                9.46  41.75 124.16                                  0
+  ErCn(raw): Wind =  3.270  Prob =   4.639  Amnt =  0.692  Max =  2.231  Min =  4.231
+  ErCn(raw): PrbF = 89.521  LocF =   0.000
+
+       Local Game Consensus of 13 for Tue24                   Verification
+ OSW 52.3 41.2 112. 5.3  9.38 0.62 0.00 0.00 0.00    54 47  12  5 10  0  0  0  0.00
+   Flood Game for ca-or-wa-id-mt Consensus of 13               Verification
+                9.77  41.62 124.21                                  0
+  ErCn(raw): Wind =  0.354  Prob =   0.379  Amnt =  0.077  Max =  1.692  Min =  5.769
+  ErCn(raw): PrbF = 95.438  LocF =   0.000
+
+       Local Game Consensus of 13 for Tue48                   Verification
+ OSW 44.1 40.3 112. 6.6  0.00 0.08 2.77 7.15 0.55    43 39  11  4  0  0 10  0  0.33
+   Flood Game for ca-or-wa-id-mt Consensus of 13               Verification
+                9.77  39.61 123.07                                 10
+  ErCn(raw): Wind =  1.242  Prob =  51.183  Amnt = 22.154  Max =  1.077  Min =  1.308
+  ErCn(raw): PrbF =  0.053  LocF =   3.626
+
+       Local Game Consensus of 13 for Wed24                   Verification
+ OSW 43.2 38.8 226. 9.1  0.00 0.00 3.23 6.77 0.52    43 39  25  9  0  0 10  0  0.33
+   Flood Game for ca-or-wa-id-mt Consensus of 13               Verification
+                8.00  39.84 122.83                                 10
+  ErCn(raw): Wind =  1.903  Prob =  45.822  Amnt = 19.000  Max =  0.231  Min =  0.154
+  ErCn(raw): PrbF =  4.000  LocF =   5.652
+
+       Local Game Consensus of 13 for Wed48                   Verification
+ OSW 42.9 38.7 354. 5.0  0.00 0.00 0.92 9.08 0.78    46 40  19  1  0  0  0 10  0.91
+   Flood Game for ca-or-wa-id-mt Consensus of 13               Verification
+                7.77  40.83 123.06                                 10
+  ErCn(raw): Wind =  2.204  Prob =   0.852  Amnt = 12.769  Max =  3.077  Min =  1.308
+  ErCn(raw): PrbF =  4.976  LocF =   4.123
+
+       Local Game Consensus of 13 for Thu24                   Verification
+ OSW 44.1 39.3 353. 8.4  0.00 0.08 1.54 8.38 0.60    46 40   0  7  0  0  0 10  0.91
+   Flood Game for ca-or-wa-id-mt Consensus of 13               Verification
+                9.08  40.56 122.13                                 10
+  ErCn(raw): Wind =  0.429  Prob =   2.615  Amnt = 30.769  Max =  1.923  Min =  0.692
+  ErCn(raw): PrbF =  0.852  LocF =   5.720
+
+       Local Game Consensus of 13 for Thu48                   Verification
+ OSW 45.4 38.5  33.13.1  0.08 2.15 7.23 0.54 0.23    46 33   4 13  0  0  0 10  0.56
+   Flood Game for ca-or-wa-id-mt Consensus of 13               Verification
+                9.23  39.34 121.24                                 10
+  ErCn(raw): Wind =  1.924  Prob =  94.503  Amnt = 32.769  Max =  0.615  Min =  5.538
+  ErCn(raw): PrbF =  0.592  LocF =   1.903
+
+                     Scaling Summary: (Week of 18 Nov 24)
+      ErrAmtCons = 118.23    ErrPrbCons =  200.21    Prob Scale = 0.7382
+      ErrTmpCons =  39.46    ErrPreCons =  266.02    Prcp Scale = 0.1483
+      ErrWndCons =  13.28    Wind Scale =  0.8918    Local Week =  90.76
+
+                        Scaling Summary for Flood Game
+      ErrPFLCons = 196.28    ErrLFLCons =   21.02    Week Scale = 1.4691
+      Location vs Prb Scale = 0.2500  Local vs Flood Game Scale = 0.6474
+
+           Fcst Ladder: (Week of 18 Nov 24) through Period Thu48
+ Rank  Forecaster   Total   Wind   Prob   Amnt    Max    Min    FLPrb  FLLoc 
+   1   Lamsma       166.8   15.2   11.7   19.0     7.3   51.4    50.9   11.3
+   2   Steiger      178.6   18.6   34.6   26.2    14.7   38.2    46.4    0.0
+   3   Ragland      191.2   22.4   29.6   24.2    16.2   39.7    43.5   15.7
+   4   Knudsen      193.9   20.4   44.4   28.1    14.7   36.7    45.4    4.1
+   5   NWS          194.2   24.6   40.9   26.8    13.2   38.2    34.7   15.8
+   6   Gryskewicz   194.4   17.1   38.0   29.6    17.6   38.2    53.7    0.2
+   7   Caldon       200.0   23.3   37.2   23.3    17.6   55.8    31.4   11.4
+   8   Consensus    200.0   17.4   32.2   25.8    17.5   40.5    46.7   20.0
+   9   SREF         209.0   19.8   23.5   20.5    27.9   42.6    47.6   27.1
+  10   Crane        209.3   18.2   33.8   29.4    23.5   44.1    60.4    0.0
+  11   Biedron      210.2   16.5   45.4   26.6    13.2   55.8    47.8    4.9
+  12   Thirlwall    211.6   27.2   33.8   27.9    25.0   35.3    48.5   14.0
+  13   Camille      213.7   17.3   48.4   28.8    19.1   45.5    47.8    6.7
+  14   Tolsma       224.5   27.2   33.0   28.8    22.0   44.1    61.6    7.9
+  15   Ruiz         265.9   67.3   42.8   20.5    23.5   39.7    45.2   27.1
+  16   Farrell      292.2   23.5   43.1   28.8    33.8   39.7    59.0   64.4
+  17   Starr        300.0   26.1   48.3   38.6    26.3   60.7    70.0   30.0
+  18   Schiller     300.0   26.1   48.3   38.6    26.3   60.7    70.0   30.0
+  19   Greene       300.0   26.1   48.3   38.6    26.3   60.7    70.0   30.0
+
+                     Semester Ranking for week of 18 Nov 24
+          Ladder includes forecasters with at least 80.% participation
+ Rank  Forecaster   Total   Wind   Prob   Amnt    Max    Min    FLPrb  FLLoc  #F
+   1   Consensus   1850.0  166.9  202.4  146.0   215.0  341.3   367.1  411.3  74
+   2   Steiger     1930.8  185.8  212.6  119.6   192.4  336.9   382.1  501.4  74
+   3   Gryskewicz  2113.9  184.2  221.3  178.7   264.0  350.3   505.0  410.5  74
+   4   Biedron     2154.5  259.0  324.8  160.9   231.3  398.7   312.1  467.8  74
+   5   Camille     2262.3  243.1  316.5  175.6   213.7  398.3   413.7  501.4  74
+   6   Crane       2310.8  185.8  273.2  162.5   300.4  371.5   511.8  505.7  74
+   7   Tolsma      2347.3  232.2  280.2  171.9   303.1  388.8   488.5  482.6  72
+   8   Caldon      2411.9  250.1  245.4  141.0   315.8  425.2   677.7  356.8  74
+   9   Knudsen     2417.6  218.7  223.5  186.2   246.5  390.9   518.0  633.7  70
+  10   Lamsma      2645.6  249.3  205.9  190.5   324.0  446.2   679.1  550.7  72
+  11   NWS         2646.3  310.5  258.2  157.1   244.6  353.2   822.5  500.2  74
+  12   Farrell     2649.6  219.5  311.6  177.0   318.8  404.4   581.8  636.6  74
+  13   Thirlwall   2758.8  234.5  198.7  192.3   331.8  408.9   408.0  984.5  74
+  14   Ragland     2802.6  239.2  254.7  137.8   297.3  327.0   759.7  786.8  72
+  15   SREF        3012.3  322.7  330.7  200.7   325.8  433.0   808.8  590.5  74
+  16   Ruiz        3475.8  358.5  320.2  284.0   311.9  509.3  1026.9  665.1  70
