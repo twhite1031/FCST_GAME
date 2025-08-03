@@ -5,11 +5,13 @@ import requests
 from io import StringIO
 import re
 import geopandas as gpd
+from geopy.distance import geodesic
 from shapely.geometry import Point
 from haversine import haversine, Unit
 import os
 import numpy as np
-
+import ast
+import matplotlib.pyplot as plt
 # Change names to match id number to real forecaster, you can add more forecasters
 id_to_forecaster = {1:("Greene", "human"),2:("Lamsma", "human"),3:("Caldon", "human"),4:("Tolsma", "human"),
                     5:("Gryskewicz", "human"),6:("Thirlwall", "human"),7:("Knudsen", "human"),8:("Farrell", "human"),
@@ -18,8 +20,11 @@ id_to_forecaster = {1:("Greene", "human"),2:("Lamsma", "human"),3:("Caldon", "hu
 
 chosen_states = ["California", "Oregon", "Washington", "Idaho", "Montana"]
 fcst_city = "Oswego"
-# Get Stations that exceeded threshold (hundreths of inch) and the times you would like to look at for ASOS precip data
+#start_day = datetime.utcnow()# Change if not using current week
+start_day = datetime(2024,11,18)
 precip_threshold = 50 # Threshold in hundreths of an inch
+
+
 
 # Storing dictionaries
 forecasts = {}  # Dictionary to store forecasts keyed by file name
@@ -40,13 +45,13 @@ def calculate_uv_components(direction, speed_knots):
     return u, v
 
 # Function to read the forecast file and add u/v wind components
-def read_forecast_file(forecast_file):
+def read_forecast_file(forecast_file,input_dir='.'):
     column_names = ["Number_id", "ProbFL", "Lat", "Lon", "High_T", "Low_T",
             "Wind_dir", "Wind_speed", "Nil_p", "Lght_p", "Mod_p",
             "High_p", "Amount_p"
         ]
     fcst = pd.read_csv(
-        forecast_file,
+        os.path.join(input_dir, forecast_file),
         delimiter=r'\s*,\s*|\s+',
         engine='python',
         header=None,
@@ -64,13 +69,13 @@ def read_forecast_file(forecast_file):
     return fcst
 
 # Function to read the forecast verification file and add u/v wind components
-def read_forecast_ver_file(forecast_ver_file, forecast_files):
+def read_forecast_ver_file(forecast_files,input_dir = "."):
     column_names = [
             "ProbFL", "High_T", "Low_T", 
             "Wind_dir", "Wind_speed", "Nil_p", "Lght_p", "Mod_p", "High_p", "Amount_p"
         ]
     fcst = pd.read_csv(
-        forecast_ver_file,
+        os.path.join(input_dir, "fcst.ver"),
         delimiter=r'\s*,\s*|\s+',
         engine='python',
         header=None,
@@ -236,12 +241,8 @@ def process_consensus_day(forecast_file, forecasts, fcst_ver, missed_game_status
 
     return consensus
 
-def get_flood_times(today=None):
-    """
-    Returns list of (forecast_label, list of valid times), where:
-    - .24 = 6Z and 12Z on the base day
-    - .48 = 18Z (same day), 0Z, 6Z, 12Z on next day
-    """
+def get_flood_times(today=start_day):
+ 
     if today is None:
         today = datetime.utcnow()
 
@@ -250,7 +251,7 @@ def get_flood_times(today=None):
     monday = datetime(today.year, today.month, today.day) - timedelta(days=days_since_monday)
     monday = monday.replace(hour=0, minute=0, second=0, microsecond=0)
 
-    # Labels: m = Tue, t = Wed, w = Thu, r = Fri
+   
     labels = ["m", "t", "w", "r"]
     expected_order = []
 
@@ -394,7 +395,7 @@ def find_closest_station(lat, lon, obs_list):
     min_dist = float('inf')
     best_station = None
     for obs in obs_list:
-        dist = haversine((lat, lon), (obs["lat"], obs["lon"]), unit=Unit.KILOMETERS)
+        dist = geodesic((lat, lon), (obs["lat"], obs["lon"])).kilometers
         if dist < min_dist:
             min_dist = dist
             best_station = obs
@@ -660,6 +661,7 @@ def apply_second_scaling(con_total_week_error, week_error_df, id_to_forecaster, 
         current_error_data = week_error_df.loc[forecaster_id].copy()
         for var in current_error_data.index:
             current_error_data[var] *= weeksc
+     
         week_error_df.loc[forecaster_id] = current_error_data
 
     for var in con_total_week_error.index:
@@ -671,9 +673,10 @@ if __name__ == "__main__":
 
     print("Starting synoptic game processing...")
 
+    os.makedirs("input_data",exist_ok=True)
     # Step 1: Load forecast files
-    forecast_files = check_forecast_files()
-    fcst_ver = read_forecast_ver_file("fcst.ver", forecast_files)
+    forecast_files = check_forecast_files(directory="input_data/")
+    fcst_ver = read_forecast_ver_file(forecast_files=forecast_files,input_dir="input_data/")
 
     numday = 0
     forecasts = {}
@@ -681,7 +684,7 @@ if __name__ == "__main__":
     # Step 2: Read individual forecast files
     for file in forecast_files:
         try:
-            forecasts[file] = read_forecast_file(file)
+            forecasts[file] = read_forecast_file(file,input_dir="input_data/")
             print(f"[✓] Successfully read {file}")
             numday += 1
         except FileNotFoundError:
@@ -704,7 +707,7 @@ if __name__ == "__main__":
         )
 
     # Step 5: Run Flood Game verification
-    flood_game_times = dict(get_flood_times(today=datetime(2024, 11, 20, 12, 0)))
+    flood_game_times = dict(get_flood_times(today=start_day))
     print("Expected flood game times for this week:", flood_game_times)
 
     flood_data = {}
@@ -740,9 +743,10 @@ if __name__ == "__main__":
         error_data[file] = calc_error_points(
             file, forecasts, fcst_ver, flood_data, missed_game_status, id_to_forecaster
         )
+
     # Sum up all errors for the week
     week_error_df = pd.DataFrame(columns=error_vars, dtype=float)
-    con_total_week_error = pd.Series(0.0, index=error_vars)
+    con_total_week_error = pd.Series(0.0, index=error_vars) # One 
 
     # Loop over files and accumulate error
     for file in forecast_files:
@@ -792,26 +796,139 @@ if __name__ == "__main__":
     weekly_scales = apply_first_scaling(con_total_week_error,week_error_df, id_to_forecaster, locprbsc_scale, locfloodsc_scale, prbsc_scale, presc_scale, windsc_scale)
     weeksc = apply_second_scaling(con_total_week_error, week_error_df, id_to_forecaster, numday, erday)
     
+    # Add total error column AFTER all scaling
+    week_error_df["TotalError"] = week_error_df.sum(axis=1)
+
+    # Insert full Consensus row
+    week_error_df.loc["Consensus"] = con_total_week_error
+
+    # Add Total Error to the Consensus row
+    week_error_df.loc["Consensus", "TotalError"] = con_total_week_error.sum()
 
     # Error data for each forecaster is stored in error_data_{file} for easy reading
+    os.makedirs("raw_error", exist_ok=True)
+    os.makedirs("raw_data", exist_ok=True)
+    os.makedirs("final_output", exist_ok=True)
+    os.makedirs("ASOS",exist_ok=True)
+    consensus_error_data.to_csv("raw_error/consensus_error_scores.csv")
+    con_total_week_error.to_csv("final_output/weighted_consensus_scores.csv")
     for file in forecast_files:
         try:
-            df = pd.DataFrame.from_dict(error_data[file]).T # Transpose for names to be the rows
-            df.index = df.index.map(lambda idx: id_to_forecaster.get(idx, ("Unknown",))[0])  # map index to name
-            df.to_csv(f"raw_error_data_{file}.csv")
-            df = pd.DataFrame.from_dict(consensus_data[file])
-            df.to_csv(f"raw_consensus_data_{file}.csv")
-            df = pd.DataFrame.from_dict(forecasts[file])
-            df.index = df.index.map(lambda idx: id_to_forecaster.get(idx, ("Unknown",))[0]) # map index to name
-            df.to_csv(f"forecasts_{file}.csv")
+            # Get and format error data
+            df_error = pd.DataFrame.from_dict(error_data[file]).T  # Transpose so forecasters are rows
+            df_error.index = df_error.index.map(lambda idx: id_to_forecaster.get(idx, ("Unknown",))[0])
+            df_error.to_csv(f"raw_error/{file}_raw_fcst_error.csv")
+
+            # Get and format consensus data
+            df_con = pd.DataFrame.from_dict(consensus_data[file])
+            df_con.to_csv(f"raw_data/{file}_raw_consensus.csv")
+        
         except KeyError:
-            print(f"[!] No error data found for {file}")
+            print(f"[!] No error or consensus data found for {file}")
+  
+    ######################################################
+    #                  DISPLAY TESTING                   #
+    ######################################################
+    
+    # Grab the week using the start time
+    days_since_monday = start_day.weekday()
+    monday = datetime(start_day.year, start_day.month, start_day.day) - timedelta(days=days_since_monday)
+    monday = monday.replace(hour=0, minute=0, second=0, microsecond=0) # Monday signifies start of week
 
+    fcst_week = monday.strftime("%d %b %Y") # For titles in tables
+    fcst_week_filename = monday.strftime("%d%b%y") # For filenames
+    week_error_df.index = [id_to_forecaster[idx][0] if idx in id_to_forecaster else idx for idx in week_error_df.index] # Make indexes names
+    week_error_df.insert(0, "Forecaster", week_error_df.index) # Now the 0 column
 
-    consensus_error_data.to_csv("consensus_error_scores.csv")
+    # Define friendly names for display
+    column_rename_map = {
+        'ProbFL': 'Flood Prob Error',
+        'FloodLoc': 'Flood Loc Error',
+        'High_T': 'High Temp Error',
+        'Low_T': 'Low Temp Error',
+        'Wind': 'Wind Error',
+        'Precip_Amount': 'Precip Amt Error',
+        'Precip_Cat': 'Precip Prob Error',
+        'TotalError': 'Total Error'
+    }
+    # Reorder the columns
+    column_order = [
+        'Forecaster',
+        'Total Error',
+        'Flood Prob Error',
+        'Flood Loc Error',
+        'High Temp Error',
+        'Low Temp Error',
+        'Wind Error',
+        'Precip Amt Error',
+        'Precip Prob Error',
+    ]
+    # Sort by TotalError (ascending = best scores first), ordering the rows
+    week_error_df = week_error_df.sort_values(by="TotalError", ascending=True)
+    # Rename then reorder the columns
+    week_error_df = week_error_df.rename(columns=column_rename_map)
+    week_error_df = week_error_df[column_order]
+    
+    fig, ax = plt.subplots(figsize=(22, len(week_error_df) * 0.5 + 1))
+    ax.axis("off")
 
-    # Save weekly weighted forecaster scores with forecaster names
-    week_error_df.index = week_error_df.index.map(
-        lambda idx: id_to_forecaster.get(idx, ("Unknown",))[0]
-    )
-    week_error_df.to_csv("weighted_weekly_error_scores.csv")
+    # Create table
+    week_error_df = week_error_df.round(3)
+   
+    table = ax.table(cellText=week_error_df.values,
+                    colLabels=week_error_df.columns,
+                    cellLoc='center',
+                    loc='center')
+
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1, 1.5)
+
+    for i in range(1, len(week_error_df) + 1):
+        name = week_error_df.iloc[i - 1]["Forecaster"]
+        for j in range(len(week_error_df.columns)):
+            if name == "Consensus":
+                table[(i, j)].set_facecolor("#e6f2ff")  # light blue
+
+    # Set font weight for column headers
+    for (i, key) in enumerate(week_error_df.columns):
+        table[(0, i)].set_text_props(weight='bold')  # Row 0 is header
+
+    # Bold row headers (i starts at 1 because row 0 is header)
+    for i in range(1, len(week_error_df) + 1):
+        table[(i, 0)].set_text_props(weight='bold')
+
+    plt.title(f"Fcst Ladder: Week of {fcst_week}", fontsize=14, pad=20)
+    week_error_df.to_csv("final_output/weighted_weekly_error_scores.csv") # Save as csv as well
+    plt.savefig(f"final_output/weekly_error_{fcst_week_filename}.pdf", dpi=300)
+    plt.show()
+    
+
+    all_obs = []
+
+    for file in forecast_files:
+        try:
+            obs_times = flood_game_times[file]  # list of datetimes
+            observations_by_time = []
+
+            for time in obs_times:
+                start = time - timedelta(minutes=8)
+                end = time + timedelta(minutes=8)
+                observations = get_asos_precipitation(precip_threshold, start, end)
+                verified = verify_flood_game(observations, chosen_states)
+                for obs in verified:
+                    obs_copy = obs.copy()
+                    obs_copy["file"] = file
+                    obs_copy["valid_time"] = time  # associate with the flood valid time
+                    all_obs.append(obs_copy)
+
+        except KeyError:
+            print(f"[!] Missing flood_game_times or observations for {file}")
+
+    # Save to CSV
+    if all_obs:
+        df = pd.DataFrame(all_obs)
+        df.to_csv(f"ASOS/ASOS_VERIFICATIONS_{fcst_week_filename}", index=False)
+        print(f"[✓] Exported {len(df)} total observations with valid times to combined_flood_verified_observations.csv")
+    else:
+        print("[!] No observations found to export.")
