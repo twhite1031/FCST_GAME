@@ -20,11 +20,10 @@ id_to_forecaster = {1:("Greene", "human"),2:("Lamsma", "human"),3:("Caldon", "hu
 
 chosen_states = ["California", "Oregon", "Washington", "Idaho", "Montana"]
 fcst_city = "Oswego"
-#start_day = datetime.utcnow()# Change if not using current week
-start_day = datetime(2024,11,18)
 precip_threshold = 50 # Threshold in hundreths of an inch
 
-
+#start_day = datetime.utcnow()# Change if not using current week
+start_day = datetime(2024,11,18)
 
 # Storing dictionaries
 forecasts = {}  # Dictionary to store forecasts keyed by file name
