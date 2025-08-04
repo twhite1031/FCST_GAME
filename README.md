@@ -73,7 +73,7 @@ This script only uses the flood game portion, with storm and ice game planned fo
 ASOS data for verification are retrieved using the [Iowa State API](https://mesonet.agron.iastate.edu/api/)
 
 # Change log
-All notable changes to this project will be documented in this [file](https://github.com/twhite1031/FCST_GAME/CHANGELOG.md).
+All notable changes to this project will be documented in this [file](https://github.com/twhite1031/FCST_GAME/blob/main/CHANGLOG.md).
 <br><br>
 # Contact
 For questions, bugs, or collaboration, feel free to reach out by opening an issue or contacting the maintainer.
