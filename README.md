@@ -37,7 +37,7 @@ This game relies on two input files per day from Monday to Thursday. <br>
 These are: m.24, m.48, t.24, t.48, w.24, w.48, r.24, r.48
 You will also need a verification file for local station data. This can be substituted with your own data if you match the formatting.<br>
 This is: fcst.ver <br>
-**These files must be placed in input_data**
+##**These files must be placed in input_data**
 
 # Customizing the Game
 Using your favorite text editor, open the synopticgame.py file found at the top level of the repository
