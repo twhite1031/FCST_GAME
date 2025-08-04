@@ -2,7 +2,7 @@
 The python rendition of the SUNY Oswego forecast game played in Synoptic I and II
 <br><br>
 # Version
-1.0
+1.0 <br>
 Refer to this repository for improvements and bug fixes
 <br><br>
 # Environment Installation
@@ -34,9 +34,9 @@ To have this repository on your on system, simply use git within your environmen
 git clone https://github.com/twhite1031/FCST_GAME/
 ```
 # Preparing the Game
-This game relies on two input files per day from Monday to Thursday. 
+This game relies on two input files per day from Monday to Thursday. <br>
 These are: m.24, m.48, t.24, t.48, w.24, w.48, r.24, r.48
-You will also need a verification file for local station data. This can be substituted with your own data if you match the formatting.
+You will also need a verification file for local station data. This can be substituted with your own data if you match the formatting.<br>
 This is: fcst.ver
 **These files must be placed in input_data**
 
@@ -53,9 +53,9 @@ Then simply use python:
 python synopticgame.py
 ```
 # Output
-There are two types of outputs regarding forecast numbers
+There are two types of outputs regarding forecast numbers, consensus and forecasters
 
-## raw_data - data simply read from the files, no error calculations
+## raw_data - data read from the files, no error calculations
 - Consensus data for each file (csv)
 ## error_data - base error calculations, but no scaling or weights
 - Consensus raw error for each file (csv)
