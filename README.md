@@ -68,7 +68,7 @@ There are two types of outputs regarding forecast numbers
 # Game rules and functionality
 The forecast game rules for this game can be found [here](https://pi.cs.oswego.edu/~osscams/local_game_files/game_rules.jpg)
 
-This script only uses the flood game portion, with storm and ice game planned for future release. 
+This script only uses the flood game portion, with storm and ice game planned for future release. <br>
 ASOS data for verification are retrieved using the [Iowa State API](https://mesonet.agron.iastate.edu/api/)
 
 # Change log
