@@ -1,0 +1,14 @@
+name: FCST_GAME_test
+channels:
+  - defaults
+dependencies:
+  - anaconda::numpy
+  - anaconda::flask
+  - conda-forge::gspread
+  - anaconda::requests
+  - anaconda::pandas
+  - conda-forge::oauth2client
+  - conda-forge::geopandas
+  - conda-forge::haversine
+  - conda-forge::geopy
+
