@@ -931,7 +931,7 @@ if __name__ == "__main__":
     # Save to CSV
     if all_obs:
         df = pd.DataFrame(all_obs)
-        df.to_csv(f"ASOS/ASOS_VERIFICATIONS_{fcst_week_filename}", index=False)
+        df.to_csv(f"ASOS/ASOS_VERIFICATIONS_{fcst_week_filename}.csv", index=False)
         print(f"[✓] Exported {len(df)} total observations with valid times to combined_flood_verified_observations.csv")
     else:
         print("[!] No observations found to export.")
