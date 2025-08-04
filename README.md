@@ -10,7 +10,7 @@ This project relies on several Python packages, so a Conda environment is provid
 <br><br>
 Refer to [this](https://www.anaconda.com/docs/getting-started/miniconda/main) link if you are unfamiliar or do not have Miniconda/Anaconda
 <br><br>
-A conda environment (.yml) is provided [here](https://github.com/twhite1031/FCST_GAME/envs)
+A conda environment (.yml) is provided [here](https://github.com/twhite1031/FCST_GAME/envs](https://github.com/twhite1031/FCST_GAME/tree/main/envs)
 <br><br>
 **Note**: Only a Windows environment has been currently been created, with linux planned in the near future. You could simply see the packages and make your own as well
 <br><br>
