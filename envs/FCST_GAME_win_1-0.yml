@@ -1,4 +1,4 @@
-name: FCST_GAME_test
+name: FCST_GAME
 channels:
   - defaults
 dependencies:
