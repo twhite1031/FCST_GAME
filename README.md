@@ -23,6 +23,7 @@ After downloading the file, use this line within Anaconda prompt to create the e
 conda env create -f FCST_GAME_win_1-0.yml
 ```
 Allow around 5-10 minutes for the environment to create
+
 <br><br>
 ----------
 <br><br>
