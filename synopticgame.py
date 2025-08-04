@@ -20,7 +20,7 @@ id_to_forecaster = {1:("Greene", "human"),2:("Lamsma", "human"),3:("Caldon", "hu
 
 chosen_states = ["California", "Oregon", "Washington", "Idaho", "Montana"]
 fcst_city = "Oswego"
-precip_threshold = 50 # Threshold in hundreths of an inch
+precip_threshold = 100 # Threshold in hundreths of an inch
 
 #start_day = datetime.utcnow()# Change if not using current week
 start_day = datetime(2024,11,18)
@@ -338,19 +338,18 @@ def verify_flood_game(observations, chosen_states, shapefile_path='state_shapefi
 
     return verified_obs
 
-# Values for precip error weight calculation
-scale = 0
-max_tracker = {
-    "50_100": 0,
-    "100_150": 0,
-    "150_200": 0,
-    "200_250": 0,
-    "250_above": 0
-}
 
 # This finds the closest station to your lat/lon and then applies the scale based on the precip the station recieved
-def calc_flood_error(lat_fcst, lon_fcst, flood_data, max_tracker, file):
-
+def calc_flood_error(lat_fcst, lon_fcst, flood_data, file):
+    # Values for precip error weight calculation
+    scale = 0
+    max_tracker = {
+        "50_100": 0,
+        "100_150": 0,
+        "150_200": 0,
+        "200_250": 0,
+        "250_above": 0
+    }
     if not flood_data[file]["verified_observations"]:
         print("[!] No verified observations found for flood game.")
         return None
@@ -440,7 +439,7 @@ def compute_consensus_error(consensus_file, forecasts_ver,flood_data):
         error_row["Lon"] = consensus["Lon"]
 
         if flood_data[file]["flood_game_verify"]:
-            error_row["FloodLoc"] = calc_flood_error(consensus["Lat"], consensus["Lon"], flood_data, max_tracker, file)
+            error_row["FloodLoc"] = calc_flood_error(consensus["Lat"], consensus["Lon"], flood_data, file)
         else:
             error_row["FloodLoc"] = 0
         
@@ -480,7 +479,7 @@ locpen = 1.4 # Location penalty for flood location error
 error_vars = ["ProbFL", "FloodLoc", "High_T", "Low_T", "Wind", "Precip_Amount", "Precip_Cat"]
 
 # Function to process the error points for an individual file
-def calc_error_points(file, forecasts, fcst_ver,flood_data,missed_game_status,id_to_forecaster):
+def calc_error_points(file, forecasts, fcst_ver,flood_data,missed_game_status,id_to_forecaster,consensus_error_data):
     error_data = {}
     verification_data = fcst_ver.loc[file] # Forecaster verification data for this file
     for forecaster_id, (name, ftype) in id_to_forecaster.items():
@@ -502,12 +501,13 @@ def calc_error_points(file, forecasts, fcst_ver,flood_data,missed_game_status,id
 
             # 1. Flood probability error
             error_series["ProbFL"] = (current_data["ProbFL"] - verification_data["ProbFL"]) ** 2
+            
             # 2. Flood location (can be used later in distance calc)
             if flood_data[file]["flood_game_verify"]:
                 if current_data["Lat"] == 0 or current_data["Lon"] == 0:
                     error_series["FloodLoc"] = locpen * consensus_error_data.loc[file]["ProbFL"]
                 else:
-                    error_series["FloodLoc"] = calc_flood_error(current_data["Lat"], current_data["Lon"], flood_data, max_tracker, file)
+                    error_series["FloodLoc"] = calc_flood_error(current_data["Lat"], current_data["Lon"], flood_data, file)
             else:
                 error_series["FloodLoc"] = 0
 
@@ -539,8 +539,11 @@ def calc_error_points(file, forecasts, fcst_ver,flood_data,missed_game_status,id
             error_series["Precip_Cat"] = a + b + c
 
         else:
+            print(f"[!] Forecaster {id_to_forecaster[forecaster_id][0]} missed {file}")
+            
             # Apply penalties for missed forecasts
             for var in error_vars:
+                print("Penalty: ", penal * consensus_error_data.loc[file, var])
                 error_series[var] = penal * consensus_error_data.loc[file, var]
                 
         error_data[forecaster_id] = error_series.copy()
@@ -740,13 +743,13 @@ if __name__ == "__main__":
     error_data = {}
     for file in forecast_files:
         error_data[file] = calc_error_points(
-            file, forecasts, fcst_ver, flood_data, missed_game_status, id_to_forecaster
+            file, forecasts, fcst_ver, flood_data, missed_game_status, id_to_forecaster,consensus_error_data
         )
 
     # Sum up all errors for the week
     week_error_df = pd.DataFrame(columns=error_vars, dtype=float)
-    con_total_week_error = pd.Series(0.0, index=error_vars) # One 
-
+    con_total_week_error = pd.Series(0.0, index=error_vars) # One y
+    
     # Loop over files and accumulate error
     for file in forecast_files:
         # Convert list to Series for readable operations
@@ -811,6 +814,7 @@ if __name__ == "__main__":
     os.makedirs("ASOS",exist_ok=True)
     consensus_error_data.to_csv("raw_error/consensus_error_scores.csv")
     con_total_week_error.to_csv("final_output/weighted_consensus_scores.csv")
+
     for file in forecast_files:
         try:
             # Get and format error data
