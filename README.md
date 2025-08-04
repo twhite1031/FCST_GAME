@@ -5,8 +5,6 @@ The python rendition of the SUNY Oswego forecast game played in Synoptic I and I
 
 # Version
 1.0
-
-<br><br>
 Refer to this repository for improvements and bug fixes
 <br><br>
 
