@@ -35,7 +35,7 @@ git clone https://github.com/twhite1031/FCST_GAME/
 # Preparing the Game
 This game relies on two input files per day from Monday to Thursday. <br>
 These are: m.24, m.48, t.24, t.48, w.24, w.48, r.24, r.48 
-<br>
+<br><br>
 You will also need a verification file for local station data. This can be substituted with your own data if you match the formatting.<br>
 This is: fcst.ver 
 <br><br>
