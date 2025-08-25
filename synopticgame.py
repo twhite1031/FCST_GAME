@@ -312,7 +312,7 @@ def get_asos_precipitation(threshold, start_date, end_date):
         if match:
             six_group = int(match.group(1))
 
-            if threshold < six_group < 3000:
+            if threshold <= six_group < 3000:
                 obs = {
                     "station_id": df.loc[idx, 'Station_ID'],
                     "lat": df.loc[idx, 'lat'],
